@@ -28,6 +28,7 @@ public class AutoMapperProfile : Profile
           opt => opt.MapFrom(src => src.Company.Name));
 
     CreateMap<JobCreateDto, Job>();
+    CreateMap<JobUpdateDto, Job>();
 
 
     // APPLICATION
