@@ -18,6 +18,7 @@ public class AutoMapperProfile : Profile
     // COMPANY
     CreateMap<Company, CompanyResponseDto>();
     CreateMap<CompanyCreateDto, Company>();
+    CreateMap<UpdateCompanyDto, Company>();
 
 
     // JOB

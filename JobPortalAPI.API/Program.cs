@@ -49,6 +49,10 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+
+
 builder.Services.AddScoped<JwtHelper>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
