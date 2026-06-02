@@ -62,4 +62,11 @@ public class JobRepository : IJobRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<Job?> GetByIdWithCompanyAsync(Guid id)
+    {
+        return await _context.Jobs
+            .Include(j => j.Company)
+            .FirstOrDefaultAsync(j => j.Id == id);
+    }
+
 }

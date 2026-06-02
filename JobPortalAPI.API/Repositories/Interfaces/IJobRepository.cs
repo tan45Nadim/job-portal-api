@@ -11,4 +11,7 @@ public interface IJobRepository
     Task UpdateAsync(Job job);
     Task DeleteAsync(Job job);
     Task SaveChangesAsync();
+
+    Task<Job?> GetByIdWithCompanyAsync(Guid id);
+
 }
