@@ -1,5 +1,6 @@
 using AutoMapper;
 using JobPortalAPI.API.DTOs.Application;
+using JobPortalAPI.API.Exceptions;
 using JobPortalAPI.API.Models;
 using JobPortalAPI.API.Repositories.Interfaces;
 using JobPortalAPI.API.Services.Interfaces;
@@ -25,20 +26,20 @@ public class ApplicationService : IApplicationService
         var job = await _jobsRepository.GetByIdWithCompanyAsync(dto.JobId);
 
         if (job == null)
-            throw new Exception("Job not found");
+            throw new NotFoundException("Job not found");
 
         if (!job.IsActive)
-            throw new Exception("Job is not active");
+            throw new BadRequestException("Job is not active");
 
         if (job.Deadline < DateTime.UtcNow)
-            throw new Exception("Application deadline has passed");
+            throw new BadRequestException("Application deadline has passed");
 
         var existingApplication =
             await _applicationRepository
                 .GetByCandidateAndJobAsync(candidateId, dto.JobId);
 
         if (existingApplication != null)
-            throw new Exception("You have already applied for this job");
+            throw new BadRequestException("You have already applied for this job");
 
         var application = _mapper.Map<Application>(dto);
 
@@ -68,10 +69,10 @@ public class ApplicationService : IApplicationService
         var job = await _jobsRepository.GetByIdWithCompanyAsync(jobId);
 
         if (job == null)
-            throw new Exception("Job not found");
+            throw new NotFoundException("Job not found");
 
         if (job.Company.OwnerId != employerId)
-            throw new Exception(
+            throw new ForbiddenException(
                 "You do not have permission to view applications for this job");
 
 
@@ -86,10 +87,10 @@ public class ApplicationService : IApplicationService
         var application = await _applicationRepository.GetByIdAsync(applicationId);
 
         if (application == null)
-            throw new Exception("Application not found");
+            throw new NotFoundException("Application not found");
 
         if (application.CandidateId != candidateId)
-            throw new Exception("You do not have permission to withdraw this application");
+            throw new ForbiddenException("You do not have permission to withdraw this application");
 
         await _applicationRepository.DeleteAsync(application);
         await _applicationRepository.SaveChangesAsync();

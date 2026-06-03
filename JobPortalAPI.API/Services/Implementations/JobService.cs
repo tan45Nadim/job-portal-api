@@ -1,5 +1,6 @@
 using AutoMapper;
 using JobPortalAPI.API.DTOs.Job;
+using JobPortalAPI.API.Exceptions;
 using JobPortalAPI.API.Models;
 using JobPortalAPI.API.Repositories.Interfaces;
 using JobPortalAPI.API.Services.Interfaces;
@@ -24,19 +25,19 @@ public class JobService : IJobService
         // Check if the company exists and belongs to the owner
         var company = await _companyRepository.GetByIdAsync(dto.CompanyId);
         if (company == null)
-            throw new Exception("Company not found");
+            throw new NotFoundException("Company not found");
 
         if (company.OwnerId != ownerId)
-            throw new Exception("Unauthorized! You are not the owner of this company.");
+            throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
 
         // verify deadline is in future
         if (dto.Deadline <= DateTime.UtcNow)
-            throw new Exception(
+            throw new BadRequestException(
                 "Deadline must be a future date");
 
         // verify salary range is valid
         if (dto.SalaryMin > dto.SalaryMax)
-            throw new Exception(
+            throw new BadRequestException(
                 "SalaryMin cannot be greater than SalaryMax");
 
         // map dto to job entity
@@ -60,7 +61,7 @@ public class JobService : IJobService
         var job = await _jobRepository.GetByIdAsync(id);
 
         if (job == null)
-            throw new Exception("Job not found");
+            throw new NotFoundException("Job not found");
 
         return _mapper.Map<JobResponseDto>(job);
     }
@@ -77,24 +78,24 @@ public class JobService : IJobService
         var job = await _jobRepository.GetByIdAsync(id);
 
         if (job == null)
-            throw new Exception("Job not found");
+            throw new NotFoundException("Job not found");
 
         // Check if the company exists and belongs to the owner
         var company = await _companyRepository.GetByIdAsync(job.CompanyId);
         if (company == null)
-            throw new Exception("Company not found");
+            throw new NotFoundException("Company not found");
 
         if (company.OwnerId != ownerId)
-            throw new Exception("Unauthorized! You are not the owner of this company.");
+            throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
 
         // verify deadline is in future
         if (dto.Deadline <= DateTime.UtcNow)
-            throw new Exception(
+            throw new BadRequestException(
                 "Deadline must be a future date");
 
         // verify salary range is valid
         if (dto.SalaryMin > dto.SalaryMax)
-            throw new Exception(
+            throw new BadRequestException(
                 "SalaryMin cannot be greater than SalaryMax");
 
         // map updated fields from dto to job entity
@@ -111,15 +112,15 @@ public class JobService : IJobService
         var job = await _jobRepository.GetByIdAsync(id);
 
         if (job == null)
-            throw new Exception("Job not found");
+            throw new NotFoundException("Job not found");
 
         // Check if the company exists and belongs to the owner
         var company = await _companyRepository.GetByIdAsync(job.CompanyId);
         if (company == null)
-            throw new Exception("Company not found");
+            throw new NotFoundException("Company not found");
 
         if (company.OwnerId != ownerId)
-            throw new Exception("Unauthorized! You are not the owner of this company.");
+            throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
 
         await _jobRepository.DeleteAsync(job);
         await _jobRepository.SaveChangesAsync();

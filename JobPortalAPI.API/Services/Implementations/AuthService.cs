@@ -1,5 +1,6 @@
 using JobPortalAPI.API.Data;
 using JobPortalAPI.API.DTOs.Auth;
+using JobPortalAPI.API.Exceptions;
 using JobPortalAPI.API.Helpers;
 using JobPortalAPI.API.Models;
 using JobPortalAPI.API.Repositories.Interfaces;
@@ -25,7 +26,7 @@ public class AuthService : IAuthService
 
         if (exists != null)
         {
-            throw new Exception("Email already exists.");
+            throw new BadRequestException("Email already exists.");
         }
 
         // Create user
@@ -57,10 +58,10 @@ public class AuthService : IAuthService
         var user = await _userRepository.GetByEmailAsync(loginDto.Email);
 
         if (user == null)
-            throw new Exception("User not found.");
+            throw new NotFoundException("User not found.");
 
         if (!PasswordHasher.Verify(loginDto.Password, user.PasswordHash))
-            throw new Exception("Invalid password.");
+            throw new BadRequestException("Invalid password.");
 
 
         // Generate JWT token

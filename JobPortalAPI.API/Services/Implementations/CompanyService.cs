@@ -1,5 +1,6 @@
 using AutoMapper;
 using JobPortalAPI.API.DTOs.Company;
+using JobPortalAPI.API.Exceptions;
 using JobPortalAPI.API.Models;
 using JobPortalAPI.API.Repositories.Interfaces;
 using JobPortalAPI.API.Services.Interfaces;
@@ -41,7 +42,7 @@ public class CompanyService : ICompanyService
         var company = await _companyRepository.GetByIdAsync(id);
 
         if (company == null)
-            throw new Exception("Company not found");
+            throw new NotFoundException("Company not found");
 
         return _mapper.Map<CompanyResponseDto>(company);
     }
@@ -51,11 +52,11 @@ public class CompanyService : ICompanyService
         var company = await _companyRepository.GetByIdAsync(id);
 
         if (company == null)
-            throw new Exception("Company not found");
+            throw new NotFoundException("Company not found");
 
         // OWNERSHIP CHECK
         if (company.OwnerId != ownerId)
-            throw new Exception("Unauthorized! You are not the owner of this company.");
+            throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
 
         // map updated fields from dto to company
         _mapper.Map(dto, company);
@@ -69,11 +70,11 @@ public class CompanyService : ICompanyService
         var company = await _companyRepository.GetByIdAsync(id);
 
         if (company == null)
-            throw new Exception("Company not found");
+            throw new NotFoundException("Company not found");
 
         // OWNERSHIP CHECK
         if (company.OwnerId != ownerId)
-            throw new Exception("Unauthorized! You are not the owner of this company.");
+            throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
 
         await _companyRepository.DeleteAsync(company);
         await _companyRepository.SaveChangesAsync();
