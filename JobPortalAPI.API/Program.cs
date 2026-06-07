@@ -11,6 +11,9 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using JobPortalAPI.API.Mappings;
 using JobPortalAPI.API.Middleware;
+using FluentValidation.AspNetCore;
+using JobPortalAPI.API.Validators;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +83,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+
 
 var app = builder.Build();
 

@@ -13,7 +13,7 @@ public interface ICompanyService
     Task<CompanyResponseDto?> GetByIdAsync(Guid id);
 
     Task UpdateAsync(Guid id,
-        UpdateCompanyDto dto,
+        CompanyUpdateDto dto,
         Guid ownerId);
 
     Task DeleteAsync(Guid id, Guid ownerId);

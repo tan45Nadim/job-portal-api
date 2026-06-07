@@ -47,7 +47,7 @@ public class CompanyController : ControllerBase
 
     [Authorize(Roles = "Employer")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCompanyDto dto)
+    public async Task<IActionResult> Update(Guid id, [FromBody] CompanyUpdateDto dto)
     {
         var userId = Guid.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);

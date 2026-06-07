@@ -1,6 +1,6 @@
 namespace JobPortalAPI.API.DTOs.Company;
 
-public class UpdateCompanyDto
+public class CompanyUpdateDto
 {
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;

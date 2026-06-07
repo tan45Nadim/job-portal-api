@@ -47,7 +47,7 @@ public class CompanyService : ICompanyService
         return _mapper.Map<CompanyResponseDto>(company);
     }
 
-    public async Task UpdateAsync(Guid id, UpdateCompanyDto dto, Guid ownerId)
+    public async Task UpdateAsync(Guid id, CompanyUpdateDto dto, Guid ownerId)
     {
         var company = await _companyRepository.GetByIdAsync(id);
 
