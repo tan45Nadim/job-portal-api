@@ -1,3 +1,4 @@
+using JobPortalAPI.API.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,21 +21,21 @@ public class TestController : ControllerBase
         return Ok("Protected endpoint");
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet("admin")]
     public IActionResult AdminOnly()
     {
         return Ok("Admin only endpoint");
     }
 
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = Roles.Employer)]
     [HttpGet("employer")]
     public IActionResult EmployerOnly()
     {
         return Ok("Employer only endpoint");
     }
 
-    [Authorize(Roles = "Candidate")]
+    [Authorize(Roles = Roles.Candidate)]
     [HttpGet("candidate")]
     public IActionResult CandidateOnly()
     {

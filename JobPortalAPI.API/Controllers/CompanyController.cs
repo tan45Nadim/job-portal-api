@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using JobPortalAPI.API.Constants;
 using JobPortalAPI.API.DTOs.Company;
 using JobPortalAPI.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ public class CompanyController : ControllerBase
         _companyService = companyService;
     }
 
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = Roles.Employer)]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CompanyCreateDto dto)
     {
@@ -45,7 +46,7 @@ public class CompanyController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = Roles.Employer)]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] CompanyUpdateDto dto)
     {
@@ -57,7 +58,7 @@ public class CompanyController : ControllerBase
         return Ok("Company updated successfully");
     }
 
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = Roles.Employer)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {

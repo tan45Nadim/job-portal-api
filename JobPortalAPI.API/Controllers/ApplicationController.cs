@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using JobPortalAPI.API.Constants;
 using JobPortalAPI.API.DTOs.Application;
 using JobPortalAPI.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +18,7 @@ public class ApplicationController : ControllerBase
         _applicationService = applicationService;
     }
 
-    [Authorize(Roles = "Candidate")]
+    [Authorize(Roles = Roles.Candidate)]
     [HttpPost]
     public async Task<IActionResult> Apply([FromBody] ApplicationCreateDto dto)
     {
@@ -28,7 +29,7 @@ public class ApplicationController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = "Candidate")]
+    [Authorize(Roles = Roles.Candidate)]
     [HttpGet("my")]
     public async Task<IActionResult> GetMyApplications()
     {
@@ -39,7 +40,7 @@ public class ApplicationController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = "Candidate")]
+    [Authorize(Roles = Roles.Candidate)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Withdraw(Guid id)
     {
@@ -50,7 +51,7 @@ public class ApplicationController : ControllerBase
         return Ok("Application withdrawn successfully");
     }
 
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = Roles.Employer)]
     [HttpGet("job/{jobId}")]
     public async Task<IActionResult> GetApplicants(Guid jobId)
     {
