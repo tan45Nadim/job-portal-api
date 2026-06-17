@@ -11,5 +11,5 @@ public interface IApplicationRepository
     Task<IEnumerable<Application>> GetByJobIdAsync(Guid jobId);
     Task DeleteAsync(Application application);
     Task SaveChangesAsync();
-
+    Task<int> GetApplicationCountAsync();
 }

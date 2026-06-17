@@ -69,4 +69,9 @@ public class JobRepository : IJobRepository
             .FirstOrDefaultAsync(j => j.Id == id);
     }
 
+    public async Task<int> GetJobCountAsync()
+    {
+        return await _context.Jobs.CountAsync();
+    }
+
 }

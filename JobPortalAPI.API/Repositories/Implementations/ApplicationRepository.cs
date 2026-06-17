@@ -59,4 +59,8 @@ public class ApplicationRepository : IApplicationRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<int> GetApplicationCountAsync()
+    {
+        return await _context.Applications.CountAsync();
+    }
 }

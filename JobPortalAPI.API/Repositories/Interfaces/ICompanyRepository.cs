@@ -10,4 +10,6 @@ public interface ICompanyRepository
     Task UpdateAsync(Company company);
     Task DeleteAsync(Company company);
     Task SaveChangesAsync();
+    Task<int> GetCompanyCountAsync();
+
 }

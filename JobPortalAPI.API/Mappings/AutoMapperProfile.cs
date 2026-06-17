@@ -1,4 +1,5 @@
 using AutoMapper;
+using JobPortalAPI.API.DTOs.Admin;
 using JobPortalAPI.API.DTOs.Application;
 using JobPortalAPI.API.DTOs.Company;
 using JobPortalAPI.API.DTOs.Job;
@@ -38,6 +39,10 @@ public class AutoMapperProfile : Profile
           opt => opt.MapFrom(src => src.Job.Title));
 
     CreateMap<ApplicationCreateDto, Application>();
+
+
+    // ADMIN
+    CreateMap<User, UserSummaryDto>();
 
   }
 }

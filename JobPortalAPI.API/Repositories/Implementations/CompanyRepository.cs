@@ -43,4 +43,11 @@ public class CompanyRepository : ICompanyRepository
     {
         await _context.SaveChangesAsync();
     }
+
+    public async Task<int> GetCompanyCountAsync()
+    {
+        return await _context.Companies.CountAsync();
+    }
+
+
 }

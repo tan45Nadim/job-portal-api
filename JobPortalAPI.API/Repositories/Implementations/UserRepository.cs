@@ -27,6 +27,31 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         await _context.Users.AddAsync(user);
+    }
+
+    public async Task SaveChangesAsync()
+    {
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<User>> GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
+    }
+
+    public async Task DeleteAsync(User user)
+    {
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<int> GetUserCountAsync()
+    {
+        return await _context.Users.CountAsync();
+    }
+
+    public async Task<int> GetUserCountByRoleAsync(string role)
+    {
+        return await _context.Users.CountAsync(x => x.Role == role);
     }
 }
