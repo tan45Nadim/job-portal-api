@@ -63,4 +63,13 @@ public class ApplicationRepository : IApplicationRepository
     {
         return await _context.Applications.CountAsync();
     }
+
+    public async Task<Application?> GetByIdWithJobAsync(Guid id)
+    {
+        return await _context.Applications
+            .Include(a => a.Job)
+            .ThenInclude(j => j.Company)
+            .Include(a => a.Candidate)
+            .FirstOrDefaultAsync(a => a.Id == id);
+    }
 }

@@ -1,3 +1,5 @@
+using JobPortalAPI.API.Constants;
+
 namespace JobPortalAPI.API.Models;
 
 public class Application
@@ -5,7 +7,7 @@ public class Application
     public Guid Id { get; set; }
     public string ResumeUrl { get; set; } = string.Empty;
     public string CoverLetter { get; set; } = string.Empty;
-    public string Status { get; set; } = "Pending";
+    public string Status { get; set; } = ApplicationStatuses.Pending;
     public DateTime AppliedAt { get; set; } = DateTime.UtcNow;
 
     // Foreign keys

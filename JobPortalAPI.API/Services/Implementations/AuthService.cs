@@ -39,6 +39,7 @@ public class AuthService : IAuthService
         };
 
         await _userRepository.AddAsync(user);
+        await _userRepository.SaveChangesAsync();
 
         // Generate JWT token
         var token = _jwtHelper.GenerateToken(user);

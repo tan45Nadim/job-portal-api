@@ -96,4 +96,21 @@ public class ApplicationService : IApplicationService
         await _applicationRepository.SaveChangesAsync();
     }
 
+    public async Task UpdateStatusAsync(Guid applicationId, Guid employerId,
+        UpdateApplicationStatusDto updateStatusDto)
+    {
+        var application = await _applicationRepository.GetByIdWithJobAsync(applicationId);
+
+        if (application == null)
+            throw new NotFoundException("Application not found");
+
+        if (application.Job.Company.OwnerId != employerId)
+            throw new ForbiddenException(
+                "You do not have permission to update the status of this application");
+
+        application.Status = updateStatusDto.Status;
+
+        await _applicationRepository.SaveChangesAsync();
+    }
+
 }

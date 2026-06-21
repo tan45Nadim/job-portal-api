@@ -13,4 +13,7 @@ public interface IApplicationService
 
     Task WithdrawAsync(Guid applicationId, Guid candidateId);
 
+    Task UpdateStatusAsync(Guid applicationId, Guid employerId,
+        UpdateApplicationStatusDto updateStatusDto);
+
 }
