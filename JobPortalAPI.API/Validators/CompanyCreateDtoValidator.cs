@@ -14,7 +14,7 @@ public class CompanyCreateDtoValidator : AbstractValidator<CompanyCreateDto>
 
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description is required.")
-            .MinimumLength(100).WithMessage("Description must be at least 100 characters long.");
+            .MinimumLength(5).WithMessage("Description must be at least 5 characters long.");
 
         RuleFor(x => x.Location)
             .NotEmpty().WithMessage("Location is required.")
@@ -23,7 +23,8 @@ public class CompanyCreateDtoValidator : AbstractValidator<CompanyCreateDto>
 
         RuleFor(x => x.Website)
             .NotEmpty().WithMessage("Website is required.")
-            .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+            .Must(uri =>
+                Uri.IsWellFormedUriString(uri, UriKind.Absolute))
             .WithMessage("Invalid website URL format.");
     }
 }

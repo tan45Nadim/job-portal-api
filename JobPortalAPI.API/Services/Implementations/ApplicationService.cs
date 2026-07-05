@@ -99,7 +99,7 @@ public class ApplicationService : IApplicationService
     public async Task UpdateStatusAsync(Guid applicationId, Guid employerId,
         UpdateApplicationStatusDto updateStatusDto)
     {
-        var application = await _applicationRepository.GetByIdWithJobAsync(applicationId);
+        var application = await _applicationRepository.GetByIdWithJobAndCompanyAsync(applicationId);
 
         if (application == null)
             throw new NotFoundException("Application not found");

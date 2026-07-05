@@ -30,16 +30,6 @@ public class JobService : IJobService
         if (company.OwnerId != ownerId)
             throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
 
-        // verify deadline is in future
-        if (dto.Deadline <= DateTime.UtcNow)
-            throw new BadRequestException(
-                "Deadline must be a future date");
-
-        // verify salary range is valid
-        if (dto.SalaryMin > dto.SalaryMax)
-            throw new BadRequestException(
-                "SalaryMin cannot be greater than SalaryMax");
-
         // map dto to job entity
         var job = _mapper.Map<Job>(dto);
 
@@ -87,16 +77,6 @@ public class JobService : IJobService
 
         if (company.OwnerId != ownerId)
             throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
-
-        // verify deadline is in future
-        if (dto.Deadline <= DateTime.UtcNow)
-            throw new BadRequestException(
-                "Deadline must be a future date");
-
-        // verify salary range is valid
-        if (dto.SalaryMin > dto.SalaryMax)
-            throw new BadRequestException(
-                "SalaryMin cannot be greater than SalaryMax");
 
         // map updated fields from dto to job entity
         _mapper.Map(dto, job);

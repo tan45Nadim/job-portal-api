@@ -38,34 +38,34 @@ public class CompanyController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
+    [HttpGet("{companyId}")]
+    public async Task<IActionResult> GetById(Guid companyId)
     {
-        var result = await _companyService.GetByIdAsync(id);
+        var result = await _companyService.GetByIdAsync(companyId);
 
         return Ok(result);
     }
 
     [Authorize(Roles = Roles.Employer)]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] CompanyUpdateDto dto)
+    [HttpPut("{companyId}")]
+    public async Task<IActionResult> Update(Guid companyId, [FromBody] CompanyUpdateDto dto)
     {
         var userId = Guid.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        await _companyService.UpdateAsync(id, dto, userId);
+        await _companyService.UpdateAsync(companyId, dto, userId);
 
         return Ok("Company updated successfully");
     }
 
     [Authorize(Roles = Roles.Employer)]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{companyId}")]
+    public async Task<IActionResult> Delete(Guid companyId)
     {
         var userId = Guid.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        await _companyService.DeleteAsync(id, userId);
+        await _companyService.DeleteAsync(companyId, userId);
 
         return Ok("Company deleted successfully");
     }

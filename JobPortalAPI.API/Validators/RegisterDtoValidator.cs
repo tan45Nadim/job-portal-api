@@ -22,7 +22,10 @@ public class RegisterDtoValidator : AbstractValidator<RegisterDto>
 
         RuleFor(x => x.Role)
             .NotEmpty().WithMessage("Role is required.")
-            .Must(role => role == "Admin" || role == "Candidate" || role == "Employer")
+            .Must(role =>
+                role == "Admin" ||
+                role == "Candidate" ||
+                role == "Employer")
             .WithMessage("Invalid role. Allowed values are: Admin, Candidate, Employer.");
 
     }

@@ -63,12 +63,12 @@ public class ApplicationController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Employer)]
-    [HttpPut("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateApplicationStatusDto dto)
+    [HttpPut("{applicationId}/status")]
+    public async Task<IActionResult> UpdateStatus(Guid applicationId, [FromBody] UpdateApplicationStatusDto dto)
     {
         var employerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        await _applicationService.UpdateStatusAsync(id, employerId, dto);
+        await _applicationService.UpdateStatusAsync(applicationId, employerId, dto);
 
         return Ok("Application status updated successfully");
     }

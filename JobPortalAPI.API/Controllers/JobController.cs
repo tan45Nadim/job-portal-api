@@ -38,10 +38,10 @@ public class JobController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id)
+    [HttpGet("{jobId}")]
+    public async Task<IActionResult> GetById(Guid jobId)
     {
-        var result = await _jobService.GetByIdAsync(id);
+        var result = await _jobService.GetByIdAsync(jobId);
 
         return Ok(result);
     }
@@ -55,25 +55,25 @@ public class JobController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Employer)]
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] JobUpdateDto dto)
+    [HttpPut("{jobId}")]
+    public async Task<IActionResult> Update(Guid jobId, [FromBody] JobUpdateDto dto)
     {
         var userId = Guid.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        var result = await _jobService.UpdateAsync(id, dto, userId);
+        var result = await _jobService.UpdateAsync(jobId, dto, userId);
 
         return Ok("Job updated successfully");
     }
 
     [Authorize(Roles = Roles.Employer)]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{jobId}")]
+    public async Task<IActionResult> Delete(Guid jobId)
     {
         var userId = Guid.Parse(
             User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        await _jobService.DeleteAsync(id, userId);
+        await _jobService.DeleteAsync(jobId, userId);
 
         return Ok("Job deleted successfully");
     }

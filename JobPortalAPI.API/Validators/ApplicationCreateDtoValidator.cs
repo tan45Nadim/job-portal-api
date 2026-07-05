@@ -12,7 +12,8 @@ public class ApplicationCreateDtoValidator : AbstractValidator<ApplicationCreate
 
         RuleFor(x => x.ResumeUrl)
             .NotEmpty().WithMessage("Resume URL is required.")
-            .Must(uri => Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+            .Must(uri =>
+                Uri.IsWellFormedUriString(uri, UriKind.Absolute))
             .WithMessage("Invalid resume URL format.");
 
         RuleFor(x => x.CoverLetter)

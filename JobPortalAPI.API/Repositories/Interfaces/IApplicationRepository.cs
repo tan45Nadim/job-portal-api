@@ -12,5 +12,5 @@ public interface IApplicationRepository
     Task DeleteAsync(Application application);
     Task SaveChangesAsync();
     Task<int> GetApplicationCountAsync();
-    Task<Application?> GetByIdWithJobAsync(Guid id);
+    Task<Application?> GetByIdWithJobAndCompanyAsync(Guid id);
 }
