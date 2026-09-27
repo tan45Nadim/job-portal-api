@@ -18,6 +18,6 @@ public class ApplicationCreateDtoValidator : AbstractValidator<ApplicationCreate
 
         RuleFor(x => x.CoverLetter)
             .NotEmpty().WithMessage("Cover letter is required.")
-            .MinimumLength(20).WithMessage("Cover letter must be at least 20 characters long.");
+            .MinimumLength(5).WithMessage("Cover letter must be at least 5 characters long.");
     }
 }

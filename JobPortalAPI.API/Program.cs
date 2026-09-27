@@ -14,8 +14,19 @@ using JobPortalAPI.API.Middleware;
 using FluentValidation.AspNetCore;
 using JobPortalAPI.API.Validators;
 using FluentValidation;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext();
+});
 
 // Add Framework Services
 builder.Services.AddControllers();
@@ -108,6 +119,9 @@ var app = builder.Build();
 
 
 // Middleware Pipeline
+
+// Request Logging Middleware
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 // Global Exception Handling Middleware
 app.UseMiddleware<ExceptionMiddleware>();

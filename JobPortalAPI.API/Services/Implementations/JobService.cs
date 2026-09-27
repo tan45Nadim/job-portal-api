@@ -12,12 +12,14 @@ public class JobService : IJobService
     private readonly IJobRepository _jobRepository;
     private readonly ICompanyRepository _companyRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<JobService> _logger;
 
-    public JobService(IJobRepository jobRepository, ICompanyRepository companyRepository, IMapper mapper)
+    public JobService(IJobRepository jobRepository, ICompanyRepository companyRepository, IMapper mapper, ILogger<JobService> logger)
     {
         _jobRepository = jobRepository;
         _companyRepository = companyRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<JobResponseDto> CreateAsync(JobCreateDto dto, Guid ownerId)
@@ -28,13 +30,23 @@ public class JobService : IJobService
             throw new NotFoundException("Company not found");
 
         if (company.OwnerId != ownerId)
+        {
+            _logger.LogWarning(
+                "Employer {EmployerId} attempted to create Job {JobId} without ownership.",
+                ownerId, dto.CompanyId);
+
             throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
+        }
 
         // map dto to job entity
         var job = _mapper.Map<Job>(dto);
 
         await _jobRepository.AddAsync(job);
         await _jobRepository.SaveChangesAsync();
+
+        _logger.LogInformation(
+            "Company created successfully. CompanyId: {CompanyId}",
+            company.Id);
 
         return _mapper.Map<JobResponseDto>(job);
     }
@@ -76,13 +88,23 @@ public class JobService : IJobService
             throw new NotFoundException("Company not found");
 
         if (company.OwnerId != ownerId)
+        {
+            _logger.LogWarning(
+                "Employer {EmployerId} attempted to update Job {JobId} without ownership.",
+                ownerId, id);
+
             throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
+        }
 
         // map updated fields from dto to job entity
         _mapper.Map(dto, job);
 
         await _jobRepository.UpdateAsync(job);
         await _jobRepository.SaveChangesAsync();
+
+        _logger.LogInformation(
+            "Company {CompanyId} updated.",
+            company.Id);
 
         return _mapper.Map<JobResponseDto>(job);
     }
@@ -100,7 +122,17 @@ public class JobService : IJobService
             throw new NotFoundException("Company not found");
 
         if (company.OwnerId != ownerId)
+        {
+            _logger.LogWarning(
+                "Employer {EmployerId} attempted to delete Job {JobId} without ownership.",
+                ownerId, id);
+
             throw new ForbiddenException("Unauthorized! You are not the owner of this company.");
+        }
+
+        _logger.LogInformation(
+            "Job {JobId} deleted successfully by owner {OwnerId}.",
+            id, ownerId);
 
         await _jobRepository.DeleteAsync(job);
         await _jobRepository.SaveChangesAsync();

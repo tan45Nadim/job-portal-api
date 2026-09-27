@@ -14,19 +14,22 @@ public class AdminService : IAdminService
     private readonly IJobRepository _jobRepository;
     private readonly IApplicationRepository _applicationRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<AdminService> _logger;
 
     public AdminService(
         IUserRepository userRepository,
         ICompanyRepository companyRepository,
         IJobRepository jobRepository,
         IApplicationRepository applicationRepository,
-        IMapper mapper)
+        IMapper mapper,
+        ILogger<AdminService> logger)
     {
         _userRepository = userRepository;
         _companyRepository = companyRepository;
         _jobRepository = jobRepository;
         _applicationRepository = applicationRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<UserSummaryDto>> GetUsersAsync()
@@ -52,8 +55,13 @@ public class AdminService : IAdminService
         if (user == null)
             throw new NotFoundException($"User with ID {id} not found.");
 
+        _logger.LogInformation(
+            "Deleting user with ID {UserId}",
+            user.Id);
+
         await _userRepository.DeleteAsync(user);
         await _userRepository.SaveChangesAsync();
+
     }
 
     public async Task DeleteCompanyAsync(Guid id)
@@ -62,6 +70,10 @@ public class AdminService : IAdminService
 
         if (company == null)
             throw new NotFoundException($"Company with ID {id} not found.");
+
+        _logger.LogInformation(
+            "Deleting company with ID {CompanyId}",
+            company.Id);
 
         await _companyRepository.DeleteAsync(company);
         await _companyRepository.SaveChangesAsync();
@@ -73,6 +85,10 @@ public class AdminService : IAdminService
 
         if (job == null)
             throw new NotFoundException($"Job with ID {id} not found.");
+
+        _logger.LogInformation(
+            "Deleting job with ID {JobId}",
+            job.Id);
 
         await _jobRepository.DeleteAsync(job);
         await _jobRepository.SaveChangesAsync();

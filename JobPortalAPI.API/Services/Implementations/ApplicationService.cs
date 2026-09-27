@@ -12,12 +12,14 @@ public class ApplicationService : IApplicationService
     private readonly IApplicationRepository _applicationRepository;
     private readonly IJobRepository _jobsRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<ApplicationService> _logger;
 
-    public ApplicationService(IApplicationRepository applicationRepository, IJobRepository jobsRepository, IMapper mapper)
+    public ApplicationService(IApplicationRepository applicationRepository, IJobRepository jobsRepository, IMapper mapper, ILogger<ApplicationService> logger)
     {
         _applicationRepository = applicationRepository;
         _jobsRepository = jobsRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<ApplicationResponseDto> ApplyAsync(
@@ -49,6 +51,10 @@ public class ApplicationService : IApplicationService
         await _applicationRepository.SaveChangesAsync();
 
         application.Job = job; // Include job details in the response
+
+        _logger.LogInformation(
+            "Candidate {CandidateId} applied for Job {JobId}. Application ID: {ApplicationId}",
+            candidateId, dto.JobId, application.Id);
 
         return _mapper.Map<ApplicationResponseDto>(application);
 
@@ -92,8 +98,13 @@ public class ApplicationService : IApplicationService
         if (application.CandidateId != candidateId)
             throw new ForbiddenException("You do not have permission to withdraw this application");
 
+        _logger.LogInformation(
+            "Candidate {CandidateId} withdrew application {ApplicationId} for Job {JobId}",
+            candidateId, applicationId, application.JobId);
+
         await _applicationRepository.DeleteAsync(application);
         await _applicationRepository.SaveChangesAsync();
+
     }
 
     public async Task UpdateStatusAsync(Guid applicationId, Guid employerId,
@@ -111,6 +122,10 @@ public class ApplicationService : IApplicationService
         application.Status = updateStatusDto.Status;
 
         await _applicationRepository.SaveChangesAsync();
+
+        _logger.LogInformation(
+            "Employer {EmployerId} updated application {ApplicationId} status to {Status}",
+            employerId, applicationId, updateStatusDto.Status);
     }
 
 }
