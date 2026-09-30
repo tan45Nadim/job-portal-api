@@ -6,6 +6,7 @@ public interface IApplicationRepository
 {
     Task AddAsync(Application application);
     Task<Application?> GetByIdAsync(Guid id);
+    Task<IEnumerable<Application>> GetAllAsync();
     Task<IEnumerable<Application>> GetByCandidateIdAsync(Guid candidateId);
     Task<Application?> GetByCandidateAndJobAsync(Guid candidateId, Guid jobId);
     Task<IEnumerable<Application>> GetByJobIdAsync(Guid jobId);

@@ -27,6 +27,16 @@ public class ApplicationRepository : IApplicationRepository
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
+    public async Task<IEnumerable<Application>> GetAllAsync()
+    {
+        return await _context.Applications
+            .Include(a => a.Job)
+            .ThenInclude(j => j.Company)
+            .Include(a => a.Candidate)
+            .OrderByDescending(a => a.AppliedAt)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<Application>> GetByCandidateIdAsync(Guid candidateId)
     {
         return await _context.Applications
