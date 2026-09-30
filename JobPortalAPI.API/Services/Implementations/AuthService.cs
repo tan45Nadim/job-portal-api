@@ -83,6 +83,15 @@ public class AuthService : IAuthService
             throw new BadRequestException("User not found.");
         }
 
+        if (!user.IsActive)
+        {
+            _logger.LogWarning(
+                "Login failed: User with email {Email} is inactive",
+                loginDto.Email);
+
+            throw new ForbiddenException("Your account is inactive.");
+        }
+
         if (!PasswordHasher.Verify(loginDto.Password, user.PasswordHash))
         {
             _logger.LogWarning(
